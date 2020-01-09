@@ -1,11 +1,12 @@
 import React from 'react'
-import { Typography } from 'antd'
 
 import './App.css'
 
+import Todo from './components/Todo'
+
 const App = () => (
   <div className="app">
-    <Typography.Title>JSONPlaceholder app</Typography.Title>
+    <Todo />
   </div>
 )
 

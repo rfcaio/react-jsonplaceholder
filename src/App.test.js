@@ -4,8 +4,8 @@ import { render } from '@testing-library/react'
 import App from './App'
 
 describe('App', () => {
-  test('show `JSONPlaceholder app`', () => {
-    const { getByText } = render(<App />)
-    expect(getByText('JSONPlaceholder app')).toBeInTheDocument()
+  test('show `Todo` component', () => {
+    const { getByTestId } = render(<App />)
+    expect(getByTestId('todo')).toBeInTheDocument()
   })
 })
