@@ -18,23 +18,13 @@ describe('Todo', () => {
       expect(getByText('No todos to list.')).toBeInTheDocument()
     })
 
-    test('load todos', async () => {
+    test('show `TodoList` component when todo list is not empty', async () => {
       axios.get.mockResolvedValue({
-        data: [
-          {
-            id: 1,
-            title: 'Foo'
-          },
-          {
-            id: 2,
-            title: 'Bar'
-          }
-        ]
+        data: [{ id: 1, title: 'Foo' }]
       })
-      const { getByText } = render(<Todo />)
+      const { getByTestId } = render(<Todo />)
       await wait()
-      expect(getByText('Foo')).toBeInTheDocument()
-      expect(getByText('Bar')).toBeInTheDocument()
+      expect(getByTestId('todo-list')).toBeInTheDocument()
     })
 
     test('show `Could not fetch todos.` when a request error occur', async () => {
