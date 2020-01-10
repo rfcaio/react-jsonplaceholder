@@ -14,6 +14,7 @@ describe('Todo', () => {
       })
       const { getByText } = render(<Todo />)
       await wait()
+      expect(axios.get).toHaveBeenCalledWith('https://jsonplaceholder.typicode.com/todos/')
       expect(getByText('No todos to list.')).toBeInTheDocument()
     })
 
@@ -34,6 +35,14 @@ describe('Todo', () => {
       await wait()
       expect(getByText('Foo')).toBeInTheDocument()
       expect(getByText('Bar')).toBeInTheDocument()
+    })
+
+    test('show `Could not fetch todos.` when a request error occur', async () => {
+      axios.get.mockRejectedValue(new Error())
+      const { getByText } = render(<Todo />)
+      await wait()
+      expect(getByText('Could not fetch todos.')).toBeInTheDocument()
+      expect(getByText('No todos to list.')).toBeInTheDocument()
     })
   })
 })

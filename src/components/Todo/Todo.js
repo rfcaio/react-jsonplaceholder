@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { message } from 'antd'
 import axios from 'axios'
 
 const Todo = () => {
@@ -9,7 +10,7 @@ const Todo = () => {
       .get('https://jsonplaceholder.typicode.com/todos/')
       .then(response => response.data)
       .then(todos => setTodos(todos))
-      .catch(console.log) // TODO: improve this
+      .catch(() => message.error('Could not fetch todos.', 5))
   }, [])
 
   return (
