@@ -27,5 +27,13 @@ describe('TodoList', () => {
       expect(getByText('Foo')).toBeInTheDocument()
       expect(getByText('Bar')).toBeInTheDocument()
     })
+
+    test('show action buttons for each todo', () => {
+      const { getByTestId } = render(<TodoList todos={todos} />)
+      expect(getByTestId('tl-btn-delete-1')).toBeInTheDocument()
+      expect(getByTestId('tl-btn-edit-1')).toBeInTheDocument()
+      expect(getByTestId('tl-btn-delete-2')).toBeInTheDocument()
+      expect(getByTestId('tl-btn-edit-2')).toBeInTheDocument()
+    })
   })
 })
