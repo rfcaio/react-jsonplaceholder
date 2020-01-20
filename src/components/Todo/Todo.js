@@ -1,26 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { message } from 'antd'
-import axios from 'axios'
+import React from 'react'
+import { Route, Switch, useRouteMatch } from 'react-router-dom'
 
 import TodoList from './List'
 
 const Todo = () => {
-  const [todos, setTodos] = useState([])
-
-  useEffect(() => {
-    axios
-      .get('https://jsonplaceholder.typicode.com/todos/')
-      .then(response => response.data)
-      .then(todos => setTodos(todos))
-      .catch(() => message.error('Could not fetch todos.', 5))
-  }, [])
-
+  const match = useRouteMatch()
   return (
-    <div data-testid="todo">
-      {
-        todos.length === 0 ? <p>No todos to list.</p> : <TodoList todos={todos} />
-      }
-    </div>
+    <Switch data-testid="todo">
+      <Route path={match.path}>
+        <TodoList />
+      </Route>
+    </Switch>
   )
 }
 

@@ -1,16 +1,9 @@
-import React from 'react'
-import { Button, Divider, Table } from 'antd'
-import PropTypes from 'prop-types'
+import React, { useEffect, useState } from 'react'
+import { Button, Divider, message, Table } from 'antd'
+import axios from 'axios'
 
-const propTypes = {
-  todos: PropTypes.array
-}
-
-const defaultProps = {
-  todos: []
-}
-
-const TodoList = ({ todos }) => {
+const TodoList = () => {
+  const [todos, setTodos] = useState([])
   const todoListProps = {
     bordered: true,
     columns: [
@@ -50,11 +43,19 @@ const TodoList = ({ todos }) => {
     size: 'middle',
     title: () => 'Todo list'
   }
+  useEffect(() => {
+    axios
+      .get('https://jsonplaceholder.typicode.com/todos/')
+      .then(response => response.data)
+      .then(todos => setTodos(todos))
+      .catch(() => message.error('Could not fetch todos.', 5))
+  }, [])
 
-  return <Table {...todoListProps} data-testid="todo-list" />
+  return (
+    todos.length > 0
+      ? <Table {...todoListProps} data-testid="todo-list" />
+      : <p>No todos to list.</p>
+  )
 }
-
-TodoList.propTypes = propTypes
-TodoList.defaultProps = defaultProps
 
 export default TodoList
