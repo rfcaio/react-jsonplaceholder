@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { Link, useRouteMatch } from 'react-router-dom'
 import { Button, Divider, message, Table } from 'antd'
 import axios from 'axios'
 
 const TodoList = () => {
   const [todos, setTodos] = useState([])
+  const match = useRouteMatch()
   const todoListProps = {
     bordered: true,
     columns: [
@@ -20,12 +22,14 @@ const TodoList = () => {
         align: 'center',
         render: todo => (
           <React.Fragment>
-            <Button
-              data-testid={`tl-btn-edit-${todo.id}`}
-              icon="edit"
-              shape="circle"
-              type="primary"
-            />
+            <Link to={`${match.url}/update/${todo.id}`}>
+              <Button
+                data-testid={`tl-btn-edit-${todo.id}`}
+                icon="edit"
+                shape="circle"
+                type="primary"
+              />
+            </Link>
             <Divider type="vertical" />
             <Button
               data-testid={`tl-btn-delete-${todo.id}`}
