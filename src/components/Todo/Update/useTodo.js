@@ -14,7 +14,7 @@ const useTodo = id => {
       .then(todo => setTodo(todo))
       .catch(() => setError(true))
       .finally(() => setLoading(false))
-  }, [])
+  }, [id])
 
   return { error, loading, todo }
 }
