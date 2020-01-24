@@ -6,7 +6,7 @@ import useTodo from './useTodo'
 
 const TodoUpdate = () => {
   const { id } = useParams()
-  const { error, loading, todo } = useTodo(id)
+  const [todo, loading, error] = useTodo(id)
 
   return (
     <Card data-testid="todo-update" loading={loading} title="Update todo">

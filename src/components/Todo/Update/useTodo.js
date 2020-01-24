@@ -16,7 +16,7 @@ const useTodo = id => {
       .finally(() => setLoading(false))
   }, [id])
 
-  return { error, loading, todo }
+  return [todo, loading, error]
 }
 
 export default useTodo

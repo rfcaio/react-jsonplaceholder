@@ -15,26 +15,28 @@ describe('useTodo', () => {
   })
 
   test('get a single todo', async () => {
-    const todo = {
+    const data = {
       completed: false,
       id: 1,
       title: 'delectus aut autem',
       userId: 1
     }
-    axios.get.mockResolvedValue({ data: todo })
+    axios.get.mockResolvedValue({ data })
     const { result, waitForNextUpdate } = renderHook(() => useTodo(1))
     await waitForNextUpdate()
-    expect(result.current.error).toBeFalsy()
-    expect(result.current.loading).toBeFalsy()
-    expect(result.current.todo).toEqual(todo)
+    const [todo, loading, error] = result.current
+    expect(error).toBeFalsy()
+    expect(loading).toBeFalsy()
+    expect(todo).toEqual(data)
   })
 
   test('set `error` to `true` when a request error occur', async () => {
     axios.get.mockRejectedValue(new Error())
     const { result, waitForNextUpdate } = renderHook(() => useTodo(1))
     await waitForNextUpdate()
-    expect(result.current.error).toBeTruthy()
-    expect(result.current.loading).toBeFalsy()
-    expect(result.current.todo).toBeNull()
+    const [todo, loading, error] = result.current
+    expect(error).toBeTruthy()
+    expect(loading).toBeFalsy()
+    expect(todo).toBeNull()
   })
 })
