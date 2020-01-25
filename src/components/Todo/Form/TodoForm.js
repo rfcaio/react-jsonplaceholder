@@ -1,6 +1,8 @@
 import React from 'react'
-import { Checkbox, Col, Form, Input, Row } from 'antd'
+import { Col, Form, Input, Row, Select } from 'antd'
 import PropTypes from 'prop-types'
+
+import useUsers from '../../../hooks/useUsers'
 
 const propTypes = {
   form: PropTypes.object.isRequired,
@@ -16,6 +18,7 @@ const defaultProps = {
 }
 
 const TodoForm = ({ form, todo }) => {
+  const [users, usersLoding] = useUsers()
   const { getFieldDecorator } = form
   return (
     <Form data-testid="todo-form">
@@ -26,7 +29,17 @@ const TodoForm = ({ form, todo }) => {
               getFieldDecorator('userId', {
                 initialValue: todo.userId,
                 rules: [{ message: 'Required field.', required: true }]
-              })(<Input />)
+              })(
+                <Select loading={usersLoding}>
+                  {
+                    users.map(user => (
+                      <Select.Option key={user.id} value={user.id}>
+                        {user.name}
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              )
             }
           </Form.Item>
         </Col>
