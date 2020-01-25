@@ -6,7 +6,7 @@ import useTodo from './useTodo'
 jest.mock('axios')
 
 describe('useTodo', () => {
-  test('request JSONPlaceholder domain', async () => {
+  test('request `http://jsonplaceholder.typicode.com/todos/1`', async () => {
     axios.get.mockResolvedValue({ data: {} })
     const { result, waitForNextUpdate } = renderHook(() => useTodo(1))
     await waitForNextUpdate()
