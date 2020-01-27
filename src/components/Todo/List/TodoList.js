@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Link, useRouteMatch } from 'react-router-dom'
-import { Button, Divider, message, Table } from 'antd'
-import axios from 'axios'
+import { Alert, Button, Divider, Table } from 'antd'
+
+import useTodos from '../../../hooks/useTodos'
 
 const TodoList = () => {
-  const [todos, setTodos] = useState([])
   const match = useRouteMatch()
+  const [todos, loading, error] = useTodos()
   const todoListProps = {
     bordered: true,
     columns: [
@@ -43,22 +44,16 @@ const TodoList = () => {
       }
     ],
     dataSource: todos,
+    loading,
     rowKey: 'id',
     size: 'middle',
     title: () => 'Todo list'
   }
-  useEffect(() => {
-    axios
-      .get('https://jsonplaceholder.typicode.com/todos/')
-      .then(response => response.data)
-      .then(todos => setTodos(todos))
-      .catch(() => message.error('Could not fetch todos.', 5))
-  }, [])
 
   return (
-    todos.length > 0
-      ? <Table {...todoListProps} data-testid="todo-list" />
-      : <p>No todos to list.</p>
+    error
+      ? <Alert message="Could not fetch todos." type="error" />
+      : <Table {...todoListProps} data-testid="todo-list" />
   )
 }
 

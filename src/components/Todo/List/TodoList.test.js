@@ -1,11 +1,12 @@
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import axios from 'axios'
-import { render, wait } from '@testing-library/react'
+import { render } from '@testing-library/react'
 
 import TodoList from './TodoList'
 
-jest.mock('axios')
+import useTodos from '../../../hooks/useTodos'
+
+jest.mock('../../../hooks/useTodos')
 
 describe('TodoList', () => {
   const todos = [
@@ -14,52 +15,22 @@ describe('TodoList', () => {
   ]
 
   describe('on render', () => {
-    test('show `No todos to list.` when todo list is empty', async () => {
-      axios.get.mockResolvedValue({ data: [] })
-      const { getByText } = render(
-        <MemoryRouter>
-          <TodoList />
-        </MemoryRouter>
-      )
-      await wait()
-      expect(axios.get).toHaveBeenCalledWith(
-        'https://jsonplaceholder.typicode.com/todos/'
-      )
-      expect(getByText('No todos to list.')).toBeInTheDocument()
-    })
-
-    test('show `Could not fetch todos.` when a request error occur', async () => {
-      axios.get.mockRejectedValue(new Error())
-      const { getByText } = render(
-        <MemoryRouter>
-          <TodoList />
-        </MemoryRouter>
-      )
-      await wait()
+    test('show `Could not fetch todos.` when a request error occur', () => {
+      useTodos.mockReturnValue([[], false, true])
+      const { getByText } = render(<TodoList />, { wrapper: MemoryRouter })
       expect(getByText('Could not fetch todos.')).toBeInTheDocument()
-      expect(getByText('No todos to list.')).toBeInTheDocument()
     })
 
-    test('list todos', async () => {
-      axios.get.mockResolvedValue({ data: todos })
-      const { getByText } = render(
-        <MemoryRouter>
-          <TodoList />
-        </MemoryRouter>
-      )
-      await wait()
+    test('list todos', () => {
+      useTodos.mockReturnValue([todos, false, false])
+      const { getByText } = render(<TodoList />, { wrapper: MemoryRouter })
       expect(getByText('Foo')).toBeInTheDocument()
       expect(getByText('Bar')).toBeInTheDocument()
     })
 
-    test('show action buttons for each todo', async () => {
-      axios.get.mockResolvedValue({ data: todos })
-      const { getByTestId } = render(
-        <MemoryRouter>
-          <TodoList />
-        </MemoryRouter>
-      )
-      await wait()
+    test('show action buttons for each todo', () => {
+      useTodos.mockReturnValue([todos, false, false])
+      const { getByTestId } = render(<TodoList />, { wrapper: MemoryRouter })
       expect(getByTestId('tl-btn-delete-1')).toBeInTheDocument()
       expect(getByTestId('tl-btn-edit-1')).toBeInTheDocument()
       expect(getByTestId('tl-btn-delete-2')).toBeInTheDocument()
