@@ -4,10 +4,10 @@ import { render } from '@testing-library/react'
 
 import TodoUpdate from './TodoUpdate'
 
-import useTodo from './useTodo'
+import useTodo from '../../../hooks/useTodo'
 
 jest.mock('react-router')
-jest.mock('./useTodo')
+jest.mock('../../../hooks/useTodo')
 
 describe('TodoUpdate', () => {
   beforeEach(() => {
