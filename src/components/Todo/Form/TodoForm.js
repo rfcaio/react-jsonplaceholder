@@ -7,7 +7,8 @@ import useUsers from '../../../hooks/useUsers'
 const propTypes = {
   form: PropTypes.object.isRequired,
   title: PropTypes.string,
-  todo: PropTypes.object
+  todo: PropTypes.object,
+  onSubmit: PropTypes.func
 }
 
 const defaultProps = {
@@ -16,14 +17,21 @@ const defaultProps = {
     completed: false,
     title: '',
     userId: null
-  }
+  },
+  onSubmit: () => null
 }
 
-const TodoForm = ({ form, title, todo }) => {
+const TodoForm = ({ form, title, todo, onSubmit }) => {
   const [users, usersLoding] = useUsers()
   const { getFieldDecorator } = form
+
+  const submit = () => {
+    form.validateFields((error, data) => {
+      !error && onSubmit(data)
+    })
+  }
   return (
-    <Form data-testid="todo-form">
+    <Form data-testid="todo-form" onSubmit={submit}>
       <Card title={title}>
         <Row gutter={16}>
           <Col sm={24} md={12}>

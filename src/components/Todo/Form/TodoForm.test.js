@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 
 import TodoForm from './TodoForm'
 
@@ -15,16 +15,17 @@ describe('TodoForm', () => {
       title: 'delectus aut autem',
       userId: 1
     }
-  })
-
-  describe('on render', () => {
     const users = [
       { id: 1, name: 'Foo' },
       { id: 2, name: 'Bar' }
     ]
+    useUsers.mockReturnValue([users])
+  })
 
-    beforeEach(() => {
-      useUsers.mockReturnValue([users])
+  describe('on render', () => {
+    test('get users from `useUsers`', () => {
+      render(<TodoForm />)
+      expect(useUsers).toHaveBeenCalled()
     })
 
     test('show `Todo form` when no title is provided', () => {
@@ -32,24 +33,30 @@ describe('TodoForm', () => {
       expect(getByText('Todo form')).toBeInTheDocument()
     })
 
-    test('show the title provided', () => {
+    test('show `Create todo` title', () => {
       const { getByText } = render(<TodoForm title="Create todo" />)
       expect(getByText('Create todo')).toBeInTheDocument()
     })
+  })
 
-    test('show todo info', () => {
-      const { getByLabelText, getByText, queryByText } = render(
-        <TodoForm todo={todo} />
-      )
-      expect(getByLabelText('Title')).toHaveValue('delectus aut autem')
-      // TODO: improve
-      expect(getByText('Foo')).toBeInTheDocument()
-      expect(queryByText('Bar')).not.toBeInTheDocument()
+  describe('on submit', () => {
+    let onSubmit = jest.fn().mockName('onSubmit')
+
+    test('not call `onSubmit` when validation errors exists', () => {
+      const { getByTestId } = render(<TodoForm onSubmit={onSubmit} />)
+      fireEvent.submit(getByTestId('todo-form'))
+      expect(onSubmit).not.toHaveBeenCalled()
     })
 
-    test('fetch users', () => {
-      render(<TodoForm />)
-      expect(useUsers).toHaveBeenCalled()
+    test('call `onSubmit` with form data', () => {
+      const { getByTestId } = render(
+        <TodoForm todo={todo} onSubmit={onSubmit} />
+      )
+      fireEvent.submit(getByTestId('todo-form'))
+      expect(onSubmit).toHaveBeenCalledWith({
+        title: 'delectus aut autem',
+        userId: 1
+      })
     })
   })
 })
