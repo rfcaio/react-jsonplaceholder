@@ -27,6 +27,16 @@ describe('TodoForm', () => {
       useUsers.mockReturnValue([users])
     })
 
+    test('show `Todo form` when no title is provided', () => {
+      const { getByText } = render(<TodoForm />)
+      expect(getByText('Todo form')).toBeInTheDocument()
+    })
+
+    test('show the title provided', () => {
+      const { getByText } = render(<TodoForm title="Create todo" />)
+      expect(getByText('Create todo')).toBeInTheDocument()
+    })
+
     test('show todo info', () => {
       const { getByLabelText, getByText, queryByText } = render(
         <TodoForm todo={todo} />

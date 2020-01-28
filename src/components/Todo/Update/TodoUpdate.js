@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams } from 'react-router'
-import { Card } from 'antd'
+import { Alert } from 'antd'
 
 import TodoForm from '../Form'
 
@@ -8,14 +8,15 @@ import useTodo from '../../../hooks/useTodo'
 
 const TodoUpdate = () => {
   const { id } = useParams()
-  const [todo, loading, error] = useTodo(id)
+  const [todo, , error] = useTodo(id)
 
-  return (
-    <Card data-testid="todo-update" loading={loading} title="Update todo">
-      {error && <p>Could not fetch todo with ID {id}.</p>}
-      {todo && <TodoForm todo={todo} />}
-    </Card>
-  )
+  if (error) {
+    return (
+      <Alert message={`Could not fetch todo with ID ${id}.`} type="error" />
+    )
+  }
+
+  return todo && <TodoForm title="Update todo" todo={todo} />
 }
 
 export default TodoUpdate

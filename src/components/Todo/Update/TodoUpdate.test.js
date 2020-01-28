@@ -11,8 +11,14 @@ jest.mock('../../../hooks/useTodo')
 
 describe('TodoUpdate', () => {
   beforeEach(() => {
+    const todo = {
+      completed: false,
+      id: 7,
+      title: 'delectus aut autem',
+      userId: 7
+    }
     useParams.mockReturnValue({ id: 7 })
-    useTodo.mockReturnValue([null, false, false])
+    useTodo.mockReturnValue([todo, false, false])
   })
 
   describe('on render', () => {
@@ -21,14 +27,7 @@ describe('TodoUpdate', () => {
       expect(getByText('Update todo')).toBeInTheDocument()
     })
 
-    test('show `Todo Form` component', () => {
-      const todo = {
-        completed: false,
-        id: 7,
-        title: 'delectus aut autem',
-        userId: 7
-      }
-      useTodo.mockReturnValue([todo, false, false])
+    test('show `TodoForm` component', () => {
       const { getByTestId } = render(<TodoUpdate />)
       expect(getByTestId('todo-form')).toBeInTheDocument()
     })
@@ -37,12 +36,6 @@ describe('TodoUpdate', () => {
       useTodo.mockReturnValue([null, false, true])
       const { getByText } = render(<TodoUpdate />)
       expect(getByText('Could not fetch todo with ID 7.')).toBeInTheDocument()
-    })
-
-    test('show loading indicator', () => {
-      useTodo.mockReturnValue([null, true, false])
-      const { getByTestId } = render(<TodoUpdate />)
-      expect(getByTestId('todo-update')).toHaveClass('ant-card-loading')
     })
   })
 })
