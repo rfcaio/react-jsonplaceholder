@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams } from 'react-router'
-import { render } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 
 import TodoUpdate from './TodoUpdate'
 
@@ -22,20 +22,30 @@ describe('TodoUpdate', () => {
   })
 
   describe('on render', () => {
-    test('show `Update todo` title', () => {
-      const { getByText } = render(<TodoUpdate />)
-      expect(getByText('Update todo')).toBeInTheDocument()
-    })
-
     test('show `TodoForm` component', () => {
       const { getByTestId } = render(<TodoUpdate />)
       expect(getByTestId('todo-form')).toBeInTheDocument()
     })
 
-    test('show `Could not fetch todo with ID 7.` when a request error occur', () => {
+    test('show `Update todo` title', () => {
+      const { getByText } = render(<TodoUpdate />)
+      expect(getByText('Update todo')).toBeInTheDocument()
+    })
+
+    test('show `Could not fetch todo with ID {ID}.` when a request error occur', () => {
       useTodo.mockReturnValue([null, false, true])
       const { getByText } = render(<TodoUpdate />)
       expect(getByText('Could not fetch todo with ID 7.')).toBeInTheDocument()
     })
+  })
+
+  describe('onSubmit', () => {
+    test.todo('request `http://jsonplaceholder.typicode.com/todos/{ID}` (PUT)')
+
+    test.todo('show `Could not update todo with ID {ID}.` when an error occur')
+
+    test.todo('show `Todo updated with success.` when no error occur')
+
+    test.todo('redirect to `/todo`')
   })
 })

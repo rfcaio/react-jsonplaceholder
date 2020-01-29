@@ -25,7 +25,8 @@ const TodoForm = ({ form, title, todo, onSubmit }) => {
   const [users, usersLoding] = useUsers()
   const { getFieldDecorator } = form
 
-  const submit = () => {
+  const submit = event => {
+    event.preventDefault()
     form.validateFields((error, data) => {
       !error && onSubmit(data)
     })
