@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Col, Form, Input, Row, Select } from 'antd'
+import { Button, Card, Col, Form, Input, Row, Select, Switch } from 'antd'
 import PropTypes from 'prop-types'
 
 import useUsers from '../../../hooks/useUsers'
@@ -33,7 +33,12 @@ const TodoForm = ({ form, title, todo, onSubmit }) => {
   }
   return (
     <Form data-testid="todo-form" onSubmit={submit}>
-      <Card title={title}>
+      <Card
+        actions={[
+          <Button htmlType="submit" key="submit" type="primary">Submit</Button>
+        ]}
+        title={title}
+      >
         <Row gutter={16}>
           <Col sm={24} md={12}>
             <Form.Item label="User">
@@ -63,6 +68,17 @@ const TodoForm = ({ form, title, todo, onSubmit }) => {
                   initialValue: todo.title,
                   rules: [{ message: 'Required field.', required: true }]
                 })(<Input />)
+              }
+            </Form.Item>
+          </Col>
+
+          <Col sm={24} md={12}>
+            <Form.Item label="Completed">
+              {
+                getFieldDecorator('completed', {
+                  initialValue: todo.completed,
+                  valuePropName: 'checked'
+                })(<Switch />)
               }
             </Form.Item>
           </Col>
