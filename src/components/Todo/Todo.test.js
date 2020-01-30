@@ -5,6 +5,6 @@ import Todo from './Todo'
 
 describe('Todo', () => {
   describe('on render', () => {
-    test.todo('tests for routes')
+    test.todo('show `TodoList` component')
   })
 })

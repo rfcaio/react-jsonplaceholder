@@ -4,5 +4,7 @@ import { render } from '@testing-library/react'
 import App from './App'
 
 describe('App', () => {
-  test.todo('tests for routes')
+  describe('on render', () => {
+    test.todo('start at `/todo`')
+  })
 })
