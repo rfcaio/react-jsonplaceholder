@@ -1,12 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useRouteMatch } from 'react-router-dom'
-import { Alert, Button, Divider, Table } from 'antd'
+import { Alert, Button, Divider, message, Popconfirm, Table } from 'antd'
+import axios from 'axios'
 
 import useTodos from '../../../hooks/useTodos'
 
 const TodoList = () => {
   const match = useRouteMatch()
-  const [todos, loading, error] = useTodos()
+  const [loading, setLoading] = useState(false)
+  const [todos, todosLoading, todosError, removeTodo] = useTodos()
+
+  const deleteTodo = async (id) => {
+    setLoading(true)
+    axios
+      .delete(`http://jsonplaceholder.typicode.com/todos/${id}`)
+      .then(() => {
+        message.success('Todo deleted with success.', 5)
+        removeTodo(id)
+      })
+      .catch(() => message.error(`Could not delete todo with ID ${id}.`, 5))
+      .finally(() => setLoading(false))
+  }
+
   const todoListProps = {
     bordered: true,
     columns: [
@@ -32,26 +47,34 @@ const TodoList = () => {
               />
             </Link>
             <Divider type="vertical" />
-            <Button
-              data-testid={`tl-btn-delete-${todo.id}`}
-              icon="delete"
-              shape="circle"
-              type="danger"
-            />
+            <Popconfirm
+              cancelText="No"
+              okText="Yes"
+              placement="leftTop"
+              title={`Do you want to delete todo with ID ${todo.id}?`}
+              onConfirm={() => deleteTodo(todo.id)}
+            >
+              <Button
+                data-testid={`tl-btn-delete-${todo.id}`}
+                icon="delete"
+                shape="circle"
+                type="danger"
+              />
+            </Popconfirm>
           </React.Fragment>
         ),
         title: 'Actions'
       }
     ],
     dataSource: todos,
-    loading,
+    loading: loading || todosLoading,
     rowKey: 'id',
     size: 'middle',
     title: () => 'Todo list'
   }
 
   return (
-    error
+    todosError
       ? <Alert message="Could not fetch todos." type="error" />
       : <Table {...todoListProps} data-testid="todo-list" />
   )

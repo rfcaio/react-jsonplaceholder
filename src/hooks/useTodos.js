@@ -6,6 +6,8 @@ const useTodos = () => {
   const [loading, setLoading] = useState(false)
   const [todos, setTodos] = useState([])
 
+  const removeTodo = id => setTodos(todos.filter(todo => todo.id !== id))
+
   useEffect(() => {
     setLoading(true)
     axios
@@ -16,7 +18,7 @@ const useTodos = () => {
       .finally(() => setLoading(false))
   }, [])
 
-  return [todos, loading, error]
+  return [todos, loading, error, removeTodo]
 }
 
 export default useTodos
