@@ -12,18 +12,18 @@ jest.mock('../../../hooks/useTodos')
 
 describe('TodoList', () => {
   beforeEach(() => {
-    const todos = [{ id: 1, title: 'Foo' }]
-    useTodos.mockReturnValue([todos, false, false])
+    const mockedTodos = [{ id: 1, title: 'Foo' }]
+    useTodos.mockReturnValue([mockedTodos, false, false])
   })
 
   describe('on render', () => {
-    test('show `Could not fetch todos.` when a request error occur', () => {
+    test('show `Could not fetch todos.` when an error occur', () => {
       useTodos.mockReturnValue([[], false, true])
       const { getByText } = render(<TodoList />, { wrapper: MemoryRouter })
       expect(getByText('Could not fetch todos.')).toBeInTheDocument()
     })
 
-    test('show action buttons for each todo', () => {
+    test('show action buttons', () => {
       const { getByTestId } = render(<TodoList />, { wrapper: MemoryRouter })
       expect(getByTestId('tl-btn-delete-1')).toBeInTheDocument()
       expect(getByTestId('tl-btn-edit-1')).toBeInTheDocument()
@@ -35,7 +35,7 @@ describe('TodoList', () => {
   })
 
   describe('on delete', () => {
-    test('show `Do you want to delete todo with ID {ID}?`', () => {
+    test('show `Do you want to delete todo with ID {ID}?` to confirm', () => {
       const {
         getByTestId,
         getByText
